@@ -1,0 +1,149 @@
+ffjk
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+*				Universidade Federal de Pelotas
+*				Autor: Luiz Guilherme M S Ito
+*				Curso: Engenharia Eletrônica
+*						Microeletrônica
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+*
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+.include amis_c5n.txt
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+.subckt nand_dois in1 in2 out vcc 0
+M1 vcc in1 out vcc CMOSP l=0.5u w=2.4u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+M2 vcc in2 out vcc CMOSP l=0.5u w=2.4u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+M3 out in1  2   0  CMOSN l=0.5u w=1.2u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+M4  2  in2  0   0  CMOSN l=0.5u w=1.2u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+.ends nand_dois
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+.subckt nand_tres in1 in2 in3 out vcc 0
+M1 vcc in1 out vcc CMOSP l=0.5u w=2.4u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+M2 vcc in2 out vcc CMOSP l=0.5u w=2.4u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+M3 vcc in3 out vcc CMOSP l=0.5u w=2.4u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+M4 out in1  2   0  CMOSN l=0.5u w=1.2u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+M5  2  in2  3   0  CMOSN l=0.5u w=1.2u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+M6  3  in3  0   0  CMOSN l=0.5u w=1.2u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+.ends nand_tres
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+.subckt inversoraCMOS in out vcc 0
+M1 vcc in out vcc CMOSP l=0.5u w=2.4u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+M2 out in 0     0 CMOSN l=0.5u w=1.2u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+.ends inversoraCMOS
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+*Declaração do circuito interno do Flip-Flop 1 "Mestre-Escravo"
+*--
+X1	  J		  clk	  Q1barra	 saidaNA1	 vcc	 0	 nand_tres
+X2 	  K 	  clk 	    Q1 		 saidaNA2 	 vcc 	 0 	 nand_tres
+X3 saidaNA1 saidaNA4  Preset     saidaNA3 	 vcc 	 0 	 nand_tres
+X4 saidaNA2 saidaNA3   Clear	 saidaNA4 	 vcc 	 0   nand_tres
+X5 saidaNA3 inversor1 			 saidaNA5	 vcc 	 0 	 nand_dois
+X6 saidaNA4 inversor1 			 saidaNA6	 vcc 	 0	 nand_dois
+X7 Preset 	saidaNA5  Q1barra 		Q1 		 vcc 	 0 	 nand_tres
+X8 Clear 	saidaNA6 	 Q1 	 Q1barra 	 vcc 	 0 	 nand_tres
+X9 clk 		inversor1 						 vcc 	 0 	 inversoraCMOS
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+*Declaração do circuito interno do Flip-Flop 2 "Mestre-Escravo"
+*--
+X10	  	J	   Q1	      Q2barra	   saidaNA11	 vcc	 0	 nand_tres
+X11 	K 	   Q1 	      Q2 		   saidaNA12 	 vcc 	 0 	 nand_tres
+X12 saidaNA11  saidaNA14  Preset       saidaNA13 	 vcc 	 0 	 nand_tres
+X13 saidaNA12  saidaNA13  Clear	       saidaNA14 	 vcc 	 0   nand_tres
+X14 saidaNA13  inversor2 		       saidaNA15	 vcc 	 0 	 nand_dois
+X15 saidaNA14  inversor2 		       saidaNA16	 vcc 	 0	 nand_dois
+X16 Preset 	   saidaNA15  Q2barra 		 Q2 		 vcc 	 0 	 nand_tres
+X17 Clear 	   saidaNA16 	 Q2 	    Q2barra 	 vcc 	 0 	 nand_tres
+X18 Q1 	       inversor2 						     vcc 	 0 	 inversoraCMOS
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+*Declaração do circuito interno do Flip-Flop 3 "Mestre-Escravo"
+*--
+X19	  	J	   Q2	      Q3barra	   saidaNA21	 vcc	 0	 nand_tres
+X20 	K 	   Q2 	      Q3 		   saidaNA22 	 vcc 	 0 	 nand_tres
+X21 saidaNA21  saidaNA24  Preset       saidaNA23 	 vcc 	 0 	 nand_tres
+X22 saidaNA22  saidaNA23  Clear	       saidaNA24 	 vcc 	 0   nand_tres
+X23 saidaNA23  inversor3 		       saidaNA25	 vcc 	 0 	 nand_dois
+X24 saidaNA24  inversor3 		       saidaNA26	 vcc 	 0	 nand_dois
+X25 Preset 	   saidaNA25  Q3barra 		 Q3 		 vcc 	 0 	 nand_tres
+X26 Clear 	   saidaNA26 	 Q3 	   Q3barra   	 vcc 	 0 	 nand_tres
+X27 Q2 	       inversor3 						     vcc 	 0 	 inversoraCMOS
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+*Declaração do circuito interno do Flip-Flop 4 "Mestre-Escravo"
+*--
+X28	  	J	   Q3	      Q4barra	   saidaNA31	 vcc	 0	 nand_tres
+X29 	K 	   Q3 	      Q4 		   saidaNA32 	 vcc 	 0 	 nand_tres
+X30 saidaNA31  saidaNA34  Preset       saidaNA33 	 vcc 	 0 	 nand_tres
+X31 saidaNA32  saidaNA33  Clear	       saidaNA34 	 vcc 	 0   nand_tres
+X32 saidaNA33  inversor4 		       saidaNA35	 vcc 	 0 	 nand_dois
+X33 saidaNA34  inversor4 		       saidaNA36	 vcc 	 0	 nand_dois
+X34 Preset 	   saidaNA35  Q4barra 		 Q4 		 vcc 	 0 	 nand_tres
+X35 Clear 	   saidaNA36 	 Q4 	   Q4barra   	 vcc 	 0 	 nand_tres
+X36 Q3 	       inversor4 						     vcc 	 0 	 inversoraCMOS
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+*Declaração do circuito interno do Flip-Flop 5 "Mestre-Escravo"
+*--
+X37	  	J	   Q4	      Q5barra	   saidaNA41	 vcc	 0	 nand_tres
+X38 	K 	   Q4 	      Q5 		   saidaNA42 	 vcc 	 0 	 nand_tres
+X39 saidaNA41  saidaNA44  Preset       saidaNA43 	 vcc 	 0 	 nand_tres
+X40 saidaNA42  saidaNA43  Clear	       saidaNA44 	 vcc 	 0   nand_tres
+X41 saidaNA43  inversor5 		       saidaNA45	 vcc 	 0 	 nand_dois
+X42 saidaNA44  inversor5 		       saidaNA46	 vcc 	 0	 nand_dois
+X43 Preset 	   saidaNA45  Q5barra 		 Q5 		 vcc 	 0 	 nand_tres
+X44 Clear 	   saidaNA46 	 Q5 	   Q5barra   	 vcc 	 0 	 nand_tres
+X45 Q4 	       inversor5 						     vcc 	 0 	 inversoraCMOS
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+*Declaração do circuito interno do Flip-Flop 6 "Mestre-Escravo"
+*--
+X46	  	J	   Q5	      Q6barra	   saidaNA51	 vcc	 0	 nand_tres
+X47 	K 	   Q5 	      Q6 		   saidaNA52 	 vcc 	 0 	 nand_tres
+X48 saidaNA51  saidaNA54  Preset       saidaNA53 	 vcc 	 0 	 nand_tres
+X49 saidaNA52  saidaNA53  Clear	       saidaNA54 	 vcc 	 0   nand_tres
+X50 saidaNA53  inversor6 		       saidaNA55	 vcc 	 0 	 nand_dois
+X51 saidaNA54  inversor6 		       saidaNA56	 vcc 	 0	 nand_dois
+X52 Preset 	   saidaNA55  Q6barra 		 Q6 		 vcc 	 0 	 nand_tres
+X53 Clear 	   saidaNA56 	 Q6 	   Q6barra   	 vcc 	 0 	 nand_tres
+X54 Q5 	       inversor6 						     vcc 	 0 	 inversoraCMOS
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+V1  J   	0 dc 5
+V2  K   	0 dc 5
+V3 clk  	0 pulse (0 5 10n  0 0 20n 40n)
+V4 Preset   0 dc 5
+V5 Clear    0 pulse (0 5 50n)
+V6  vcc	 	0 dc 5
+V7  gnd	 	0 dc 0
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+.control
+tran 2n 3000n
+plot clk Q1+6 Q2+12 Q3+18 Q4+24 Q5+30 Q6+36
+.endc
+.end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,28 @@
+inversoraCMOS
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+*			Universidade Federal de Pelotas
+*			Autor: Luiz Guilherme M S Ito
+*			Curso: Engenharia Eletrônica
+*					Microeletrônica
+*----------------------------------------------------------------------
+*----------------------------------------------------------------------
+*
+*-------------------------------------------------
+.include amis_c5n.txt
+*--------------------------------------------------
+ M1 vcc in out vcc CMOSP l=0.5u w=2.4u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+
+ M2 out in 0 0 CMOSN l=0.5u w=1.2u pd=4.2u ad=0.6p ps=4.2u as=0.6p
+*-----------------------------------------------------
+V1 vcc 0 dc 5
+V2 in 0 pulse (0 5 0 200p 200p 2n 4n) 
+*-----------------------------------------------------
+.control
+ * passo = 0.1ps, tempo = 100ns
+ tran 2n 5n
+ * atribui valor DC para as curvas não ficarem sobrepostas
+ plot in+6 out 
+
+.endc 
+.end
