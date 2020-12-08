@@ -1,2 +1,2 @@
-# 6-bits-conter-FFJK-Master-Slave
-0 to 6-bit counter using JK master-slave flip-flop SpiceOpus
+# Filtro Elíptico Digital Pass-Band
+FIltro elípito digital implementado para cadeira de Teoria de Redes
